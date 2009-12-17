@@ -15,7 +15,7 @@ end
 def resolve_all
   url = "http://#{@site}.hoptoadapp.com/errors?auth_token=#{@key}" 
   errors = RestClient.get(url)
-  errors = Crack::XML.parse(errors)
+#  errors = Crack::XML.parse(errors)
   unless !defined?(errors["groups"]) || errors["groups"].nil? || errors["groups"].empty?
     errors["groups"].each do |e|
       "e is a #{e.class}"
