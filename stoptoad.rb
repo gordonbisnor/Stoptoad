@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'rest_client'
-#require 'crack'
+require 'crack'
 
 get '/' do
   erb :index 
