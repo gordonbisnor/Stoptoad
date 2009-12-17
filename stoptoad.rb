@@ -25,11 +25,8 @@ end
 
 # Used by resolve_all to resolve a single error
 def resolve id    
-  puts "resolving error #{id}"
   RestClient.put("http://#{@site}.hoptoadapp.com/errors/#{id}?auth_token=#{@key}", :group => { 
     :resolved => true
     })
-  end
 end
   
-end
