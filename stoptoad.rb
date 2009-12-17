@@ -6,7 +6,7 @@ get '/' do
   erb :index 
 end
 
-get '/resolve' do
+post '/resolve' do
   @key, @site = [params[:key], params[:site]]
   resolve_all
 end
