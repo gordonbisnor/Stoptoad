@@ -22,7 +22,7 @@ def resolve_all
     end 
     resolve_all
   else
-    "Stoptoad Complete! <p><a href='/'>Back</a></p>"
+    erb :completed
   end
 end
 
