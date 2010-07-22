@@ -12,9 +12,26 @@ post '/resolve' do
   resolve_all
 end
 
+def try_http_and_https
+  @protocol = "http"
+  begin
+    yield
+  rescue
+    if @protocol == "http"
+      @protocol = "https"
+      retry
+    else
+      raise $!
+    end
+  end
+end
+
 def resolve_all
-  url = "http://#{@site}.hoptoadapp.com/errors?auth_token=#{@key}" 
-  errors = RestClient.get(url)
+  errors = ''
+  try_http_and_https do
+    errors = RestClient.get("#{@protocol}://#{@site}.hoptoadapp.com/errors?auth_token=#{@key}")
+  end
+
   errors = Crack::XML.parse(errors)
   unless !defined?(errors["groups"]) || errors["groups"].nil? || errors["groups"].empty?
     errors["groups"].each do |e|
@@ -28,10 +45,12 @@ end
 
 # Used by resolve_all to resolve a single error
 def resolve id    
-  RestClient.put("http://#{@site}.hoptoadapp.com/errors/#{id}?auth_token=#{@key}", :group => { 
-    :resolved => true
-    },
-    :auth_token => @key
-    )
+  try_http_and_https do
+    RestClient.put("#{@protocol}://#{@site}.hoptoadapp.com/errors/#{id}?auth_token=#{@key}", :group => { 
+      :resolved => true
+      },
+      :auth_token => @key
+      )
+  end
 end
-  
+
